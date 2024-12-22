@@ -6,11 +6,14 @@ interface MongooseConnection {
   conn: Mongoose | null;
   promise: Promise<Mongoose> | null;
 }
+type MyGlobal = typeof globalThis & {
+  mongoose: MongooseConnection;
+};
 
-let cached: MongooseConnection = (global as any).mongoose;
+let cached: MongooseConnection = (global as MyGlobal).mongoose;
 
 if (!cached) {
-  cached = (global as any).mongoose = {
+  cached = (global as MyGlobal).mongoose = {
     conn: null,
     promise: null,
   };
